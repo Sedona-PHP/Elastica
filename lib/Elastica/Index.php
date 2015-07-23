@@ -126,7 +126,9 @@ class Index implements SearchableInterface
     public function updateDocuments(array $docs)
     {
         foreach ($docs as $doc) {
-            $doc->setIndex($this->getName());
+            if(!$doc->getIndex()) {
+                $doc->setIndex($this->getName());
+            }
         }
 
         return $this->getClient()->updateDocuments($docs);
@@ -198,7 +200,9 @@ class Index implements SearchableInterface
     public function deleteDocuments(array $docs)
     {
         foreach ($docs as $doc) {
-            $doc->setIndex($this->getName());
+            if(!$doc->getIndex()) {
+                $doc->setIndex($this->getName());
+            }
         }
 
         return $this->getClient()->deleteDocuments($docs);
