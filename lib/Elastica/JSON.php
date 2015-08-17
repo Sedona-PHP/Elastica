@@ -22,21 +22,26 @@ class JSON
     {
         // extract arguments
         $args = func_get_args();
-
         // default to decoding into an assoc array
         if (sizeof($args) === 1) {
             $args[] = true;
         }
-
+        // add code to set use JSON_BIGINT_AS_STRING by default
+        if (!isset($args[2])) {
+            $args[2] = 512;
+        }
+        if (isset($args[3])) {
+            $args[3] = $args[3] | JSON_BIGINT_AS_STRING;
+        } else {
+            $args[3] = JSON_BIGINT_AS_STRING;
+        }
         // run decode
         $array = call_user_func_array('json_decode', $args);
-
         // turn errors into exceptions for easier catching
         $error = json_last_error();
         if ($error !== JSON_ERROR_NONE) {
             throw new JSONParseException($error);
         }
-
         // output
         return $array;
     }
